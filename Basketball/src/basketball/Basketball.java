@@ -12,7 +12,7 @@ package basketball;
  */
 
 import javax.swing.JFrame;
-import java.applet.AudioClip;
+//import java.applet.AudioClip;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Color;
@@ -30,7 +30,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
 
     private Image dbImage;
     private Graphics dbg;
-    private int gravedad;
+    private final int gravedad;
     private int velocidadVertical;
     private int velocidadHorizontal;
     private Bola bola;
@@ -42,12 +42,18 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private int contador;
     private boolean activo;
     
+    //Sonidos
+    private SoundClip bomb;
+    
     public Basketball() {
         
         setSize(700, 700);
         setBackground(Color.orange);
         addKeyListener(this);
         addMouseListener(this);
+        
+        //SoundClips
+        bomb = new SoundClip("Explosion.wav");
         
         gravedad = 1;
         velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
@@ -117,6 +123,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
             velocidadHorizontal = (int)((Math.random() * 15) + 5);
             activo = false;
+            bomb.play();
             
             if(contador > 1) {
                 contador--;
