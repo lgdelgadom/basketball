@@ -234,8 +234,11 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
                 g.drawString("PAUSA", getWidth()/2 - 100, getHeight()/2);
             }
             if(state == 2) {
-                g.setFont(new Font("arial", Font.BOLD, 60));
-                g.drawString("INSTRUCCIONES", getWidth()/2 - 230, getHeight()/2);
+                g.setColor(Color.green);
+                g.fillRect(100, 100, getWidth() - 200, getHeight() - 200);
+                g.setColor(Color.white);
+                g.setFont(new Font("arial", Font.BOLD, 50));
+                g.drawString("INSTRUCCIONES", getWidth()/2 - 210, 200);
             }
             
         } else {
