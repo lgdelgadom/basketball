@@ -41,7 +41,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private int vidas;
     private int contador;
     private boolean activo;
-    private boolean pausa;
+    private int state;
     
     //Sonidos
     private SoundClip bomb;
@@ -66,7 +66,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         vidas = 5;
         contador = 3;
         activo = false;
-        pausa = false;
+        state = 0;
         
         bola = new Bola(100, 400, Toolkit.getDefaultToolkit().getImage(bURL));
         canasta = new Canasta(0, 0, Toolkit.getDefaultToolkit().getImage(cURL));
@@ -101,7 +101,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     
     void actualiza() {
         
-        if(!pausa) {
+        if(state == 0) {
             if(activo) {
                 bola.setPosX(bola.getPosX() + velocidadHorizontal);
                 bola.setPosY(bola.getPosY() + velocidadVertical);
@@ -165,7 +165,18 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             right = true;
         }
         if(e.getKeyCode() == KeyEvent.VK_P) {
-            pausa = !pausa;
+            if(state == 1){
+                state = 0;
+            } else {
+                state = 1;
+            }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_I) {
+            if(state == 2){
+                state = 0;
+            } else {
+                state = 2;
+            }
         }
         
     }
@@ -218,9 +229,13 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             g.setColor(Color.white);
             g.drawString("Score: " + score, 20, 60);
             g.drawString("Lives: " + vidas, 20, 80);
-            if(pausa) {
+            if(state == 1) {
                 g.setFont(new Font("arial", Font.BOLD, 60));
                 g.drawString("PAUSA", getWidth()/2 - 100, getHeight()/2);
+            }
+            if(state == 2) {
+                g.setFont(new Font("arial", Font.BOLD, 60));
+                g.drawString("INSTRUCCIONES", getWidth()/2 - 230, getHeight()/2);
             }
             
         } else {
