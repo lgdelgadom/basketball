@@ -7,7 +7,7 @@
 package basketball;
 
 /**
- * hola
+ * v.0.0.1
  * @author Luis
  */
 
@@ -41,6 +41,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private int vidas;
     private int contador;
     private boolean activo;
+    private boolean pausa;
     
     //Sonidos
     private SoundClip bomb;
@@ -65,6 +66,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         vidas = 5;
         contador = 3;
         activo = false;
+        pausa = false;
         
         bola = new Bola(100, 400, Toolkit.getDefaultToolkit().getImage(bURL));
         canasta = new Canasta(0, 0, Toolkit.getDefaultToolkit().getImage(cURL));
@@ -99,19 +101,20 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     
     void actualiza() {
         
-        if(activo) {
-            bola.setPosX(bola.getPosX() + velocidadHorizontal);
-            bola.setPosY(bola.getPosY() + velocidadVertical);
-            velocidadVertical += gravedad;
+        if(!pausa) {
+            if(activo) {
+                bola.setPosX(bola.getPosX() + velocidadHorizontal);
+                bola.setPosY(bola.getPosY() + velocidadVertical);
+                velocidadVertical += gravedad;
+            }
+
+            if(left){
+                canasta.setPosX(canasta.getPosX()-(vidas * 3));
+            }
+            if(right){
+                canasta.setPosX(canasta.getPosX()+(vidas * 3));
+            }
         }
-        
-        if(left){
-            canasta.setPosX(canasta.getPosX()-(vidas * 3));
-        }
-        if(right){
-            canasta.setPosX(canasta.getPosX()+(vidas * 3));
-        }
-        
     }
     
     void checaColision() {
@@ -160,6 +163,9 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         }
         if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             right = true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_P) {
+            pausa = !pausa;
         }
         
     }
@@ -212,6 +218,10 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             g.setColor(Color.white);
             g.drawString("Score: " + score, 20, 60);
             g.drawString("Lives: " + vidas, 20, 80);
+            if(pausa) {
+                g.setFont(new Font("arial", Font.BOLD, 60));
+                g.drawString("PAUSA", getWidth()/2 - 100, getHeight()/2);
+            }
             
         } else {
             
