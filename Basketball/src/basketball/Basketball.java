@@ -43,8 +43,12 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private boolean activo;
     private int state;
     
+    private long tiempoActual;
+    private long tiempoInicial;
     //Sonidos
     private SoundClip bomb;
+     //Animaciones
+    private Animacion pelotaAnim, canastaAnim;
     
     public Basketball() {
         
@@ -55,12 +59,27 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         
         //SoundClips
         bomb = new SoundClip("Explosion.wav");
+        //Animaciones
+	Image bola1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("bola.png"));
+	//Image bola2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("bola.png"));
+	Image canasta1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
+	//Image canasta2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
+	
+	pelotaAnim = new Animacion();
+        canastaAnim = new Animacion();
+        
+	pelotaAnim.sumaCuadro(bola1, 100);
+	//pelotaAnim.sumaCuadro(bola2, 200);
+
+        canastaAnim.sumaCuadro(canasta1, 100);
+        //canastaAnim.sumaCuadro(canasta2, 200);
+
         
         gravedad = 1;
         velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
         velocidadHorizontal = (int)((Math.random() * 15) + 5);
-        URL bURL = this.getClass().getResource("bola.png");
-        URL cURL = this.getClass().getResource("canasta.png");
+        //URL bURL = this.getClass().getResource("bola.png");
+        //URL cURL = this.getClass().getResource("canasta.png");
         right = false;
         left = false;
         vidas = 5;
@@ -68,8 +87,8 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         activo = false;
         state = 0;
         
-        bola = new Bola(100, 400, Toolkit.getDefaultToolkit().getImage(bURL));
-        canasta = new Canasta(0, 0, Toolkit.getDefaultToolkit().getImage(cURL));
+        bola = new Bola(100, 400, pelotaAnim);
+        canasta = new Canasta(0, 0, canastaAnim);
         canasta.setPosX(getWidth()/2 - canasta.getAncho()/2);
         canasta.setPosY(getHeight() - canasta.getAlto() - 10);
         start();
@@ -84,7 +103,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     }
     
     public void run() {
-        
+        tiempoActual = System.currentTimeMillis();
         while(true){
         
             actualiza();
@@ -100,7 +119,16 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     }
     
     void actualiza() {
-        
+        //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
+         long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
+            
+         //Guarda el tiempo actual
+       	 tiempoActual += tiempoTranscurrido;
+
+         //Actualiza la animación en base al tiempo transcurrido
+         pelotaAnim.actualiza(tiempoTranscurrido);
+         canastaAnim.actualiza(tiempoTranscurrido);
+         
         if(state == 0) {
             if(activo) {
                 bola.setPosX(bola.getPosX() + velocidadHorizontal);

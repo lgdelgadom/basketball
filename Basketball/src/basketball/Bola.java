@@ -11,13 +11,13 @@ package basketball;
  * @author Luis
  */
 
-import java.awt.Image;
+//import java.awt.Image;
 
 public class Bola extends Objeto {
     
-    public Bola(int posX, int posY, Image image) {
+    public Bola(int posX, int posY, Animacion animacion) {
         
-        super(posX, posY, image);
+        super(posX, posY, animacion);
         
     }
     

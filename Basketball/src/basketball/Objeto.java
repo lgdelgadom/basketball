@@ -20,13 +20,13 @@ public class Objeto {
     
     private int posX;
     private int posY;
-    private ImageIcon icono;  
+    private Animacion animacion;  
     
-    public Objeto(int posX, int posY, Image image) {
+    public Objeto(int posX, int posY, Animacion animacion) {
         
         this.posX = posX;
         this.posY = posY;
-        icono = new ImageIcon(image);
+        this.animacion = animacion;
         
     }
     
@@ -54,33 +54,33 @@ public class Objeto {
         
     }
     
-    public void setImageIcon(ImageIcon icono) {
+    public void setImageIcon(Animacion animacion) {
         
-        this.icono = icono;
+        this.animacion = animacion;
         
     }
     
     public ImageIcon getImageIcon() {
         
-        return icono;
+        return animacion.getImagen();
         
     }
     
     public int getAncho() {
         
-        return icono.getIconWidth();
+        return animacion.getImagen().getIconWidth();
     
     }
     
     public int getAlto() {
         
-        return icono.getIconHeight();
+        return animacion.getImagen().getIconHeight();
         
     }
     
     public Image getImagenI() {
         
-        return icono.getImage();
+        return animacion.getImagen().getImage();
         
     }
     

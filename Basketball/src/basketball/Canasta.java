@@ -11,13 +11,13 @@ package basketball;
  * @author Luis
  */
 
-import java.awt.Image;
+//import java.awt.Image;
 
 public class Canasta extends Objeto {
     
-    public Canasta(int posX, int posY, Image image) {
+    public Canasta(int posX, int posY, Animacion animacion) {
         
-        super(posX, posY, image);
+        super(posX, posY, animacion);
         
     }
     
