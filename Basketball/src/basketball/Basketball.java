@@ -76,17 +76,12 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
 
         
         gravedad = 1;
-<<<<<<< HEAD
-        velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
-        velocidadHorizontal = (int)((Math.random() * 15) + 5);
-        //URL bURL = this.getClass().getResource("bola.png");
-        //URL cURL = this.getClass().getResource("canasta.png");
-=======
+
         velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
         velocidadHorizontal = (int)((Math.random() * 4) + 6);
-        URL bURL = this.getClass().getResource("bola.png");
-        URL cURL = this.getClass().getResource("canasta.png");
->>>>>>> d5dc236ae7ad8056fc2f0219de1dc4ddfe66cd27
+//        URL bURL = this.getClass().getResource("bola.png");
+  //      URL cURL = this.getClass().getResource("canasta.png");
+
         right = false;
         left = false;
         vidas = 5;
