@@ -76,10 +76,17 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
 
         
         gravedad = 1;
+<<<<<<< HEAD
         velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
         velocidadHorizontal = (int)((Math.random() * 15) + 5);
         //URL bURL = this.getClass().getResource("bola.png");
         //URL cURL = this.getClass().getResource("canasta.png");
+=======
+        velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
+        velocidadHorizontal = (int)((Math.random() * 4) + 6);
+        URL bURL = this.getClass().getResource("bola.png");
+        URL cURL = this.getClass().getResource("canasta.png");
+>>>>>>> d5dc236ae7ad8056fc2f0219de1dc4ddfe66cd27
         right = false;
         left = false;
         vidas = 5;
@@ -136,10 +143,10 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
                 velocidadVertical += gravedad;
             }
 
-            if(left){
+            if(left && canasta.getPosX() > getWidth()/2){
                 canasta.setPosX(canasta.getPosX()-(vidas * 3));
             }
-            if(right){
+            if(right && canasta.getPosX()+canasta.getAncho() < getWidth()){
                 canasta.setPosX(canasta.getPosX()+(vidas * 3));
             }
         }
@@ -151,8 +158,8 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             
             bola.setPosX(100);
             bola.setPosY(400);
-            velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
-            velocidadHorizontal = (int)((Math.random() * 15) + 5);
+            velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
+            velocidadHorizontal = (int)((Math.random() * 4) + 6);
             activo = false;
             bomb.play();
             
@@ -175,8 +182,8 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             
             bola.setPosX(100);
             bola.setPosY(400);
-            velocidadVertical = (int)(-1 * (Math.random() * 20) - 5);
-            velocidadHorizontal = (int)((Math.random() * 15) + 5);
+            velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
+            velocidadHorizontal = (int)((Math.random() * 4) + 6);
             score +=2;
             activo = false;
             
