@@ -60,8 +60,12 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         //SoundClips
         bomb = new SoundClip("Explosion.wav");
         //Animaciones
-	Image bola1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("bola.png"));
-	//Image bola2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("bola.png"));
+	Image bola1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball1.png"));
+	Image bola2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball2.png"));
+        Image bola3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball3.png"));
+        Image bola4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball4.png"));
+        Image bola5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball5.png"));
+        Image bola6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball6.png"));
 	Image canasta1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
 	//Image canasta2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
 	
@@ -69,18 +73,19 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         canastaAnim = new Animacion();
         
 	pelotaAnim.sumaCuadro(bola1, 100);
-	//pelotaAnim.sumaCuadro(bola2, 200);
+        pelotaAnim.sumaCuadro(bola2, 100);
+        pelotaAnim.sumaCuadro(bola3, 100);
+        pelotaAnim.sumaCuadro(bola4, 100);
+        pelotaAnim.sumaCuadro(bola5, 100);
+        pelotaAnim.sumaCuadro(bola6, 100);
 
         canastaAnim.sumaCuadro(canasta1, 100);
-        //canastaAnim.sumaCuadro(canasta2, 200);
 
         
         gravedad = 1;
 
         velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
         velocidadHorizontal = (int)((Math.random() * 4) + 6);
-//        URL bURL = this.getClass().getResource("bola.png");
-  //      URL cURL = this.getClass().getResource("canasta.png");
 
         right = false;
         left = false;
@@ -128,7 +133,6 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
        	 tiempoActual += tiempoTranscurrido;
 
          //Actualiza la animación en base al tiempo transcurrido
-         pelotaAnim.actualiza(tiempoTranscurrido);
          canastaAnim.actualiza(tiempoTranscurrido);
          
         if(state == 0) {
@@ -136,6 +140,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
                 bola.setPosX(bola.getPosX() + velocidadHorizontal);
                 bola.setPosY(bola.getPosY() + velocidadVertical);
                 velocidadVertical += gravedad;
+                pelotaAnim.actualiza(tiempoTranscurrido);
             }
 
             if(left && canasta.getPosX() > getWidth()/2){
