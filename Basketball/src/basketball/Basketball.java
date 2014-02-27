@@ -22,9 +22,18 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedReader;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Random;
+import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 
 public class Basketball extends JFrame implements Runnable, KeyListener, MouseListener {
 
@@ -40,7 +49,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private boolean right;
     private int vidas;
     private int contador;
-    private boolean activo;
+    private boolean activo, guardar, cargar;
     private int state;
     
     private long tiempoActual;
@@ -48,7 +57,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     //Sonidos
     private SoundClip bomb;
      //Animaciones
-    private Animacion pelotaAnim, canastaAnim;
+    private Animacion pelotaAnim, canastaAnim, netLeft, netRight;
     
     public Basketball() {
         
@@ -66,11 +75,17 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         Image bola4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball4.png"));
         Image bola5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball5.png"));
         Image bola6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball6.png"));
-	Image canasta1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
-	//Image canasta2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("canasta.png"));
+	Image canasta1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("net.png"));
+        Image canastaR1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("netRight1.png"));
+        Image canastaR2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("netRight2.png"));
+        Image canastaL1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("netLeft1.png"));
+        Image canastaL2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("netLeft2.png"));
 	
 	pelotaAnim = new Animacion();
         canastaAnim = new Animacion();
+        netLeft = new Animacion();
+        netRight = new Animacion();
+        
         
 	pelotaAnim.sumaCuadro(bola1, 100);
         pelotaAnim.sumaCuadro(bola2, 100);
@@ -80,6 +95,10 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         pelotaAnim.sumaCuadro(bola6, 100);
 
         canastaAnim.sumaCuadro(canasta1, 100);
+        netLeft.sumaCuadro(canastaL1, 100);
+        netLeft.sumaCuadro(canastaL2, 100);
+        netRight.sumaCuadro(canastaR1, 100);
+        netRight.sumaCuadro(canastaR2, 100);
 
         
         gravedad = 1;
@@ -92,6 +111,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         vidas = 5;
         contador = 3;
         activo = false;
+        guardar = cargar = false;
         state = 0;
         
         bola = new Bola(100, 400, pelotaAnim);
@@ -125,15 +145,30 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         }
     }
     
-    void actualiza() {
+    void actualiza(){
         //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
+         if(guardar){
+             guardar = false;
+             try {
+                 grabaArchivo();
+             } catch(IOException e) {
+                 System.out.println("Error en guardar");
+             }
+         }
+         if(cargar){
+             cargar=false;
+             try {
+                leeArchivo();
+             } catch(IOException e) {
+                 System.out.println("Error en cargar");
+             }
+         }
          long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
             
          //Guarda el tiempo actual
        	 tiempoActual += tiempoTranscurrido;
 
          //Actualiza la animación en base al tiempo transcurrido
-         canastaAnim.actualiza(tiempoTranscurrido);
          
         if(state == 0) {
             if(activo) {
@@ -145,12 +180,72 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
 
             if(left && canasta.getPosX() > getWidth()/2){
                 canasta.setPosX(canasta.getPosX()-(vidas * 3));
+                netLeft.actualiza(tiempoTranscurrido);
+                canasta.setImageIcon(netLeft);
             }
-            if(right && canasta.getPosX()+canasta.getAncho() < getWidth()){
+            else if(right && canasta.getPosX()+canasta.getAncho() < getWidth()){
                 canasta.setPosX(canasta.getPosX()+(vidas * 3));
+                netRight.actualiza(tiempoTranscurrido);
+                canasta.setImageIcon(netRight);
+            }
+            else{
+                canastaAnim.actualiza(tiempoTranscurrido);
+                canasta.setImageIcon(canastaAnim);
             }
         }
     }
+    
+           public void leeArchivo() throws IOException {
+                                                          
+                BufferedReader fileIn;
+                try {
+                        fileIn = new BufferedReader(new FileReader("guacamoleSave"));
+                } catch (FileNotFoundException e){
+                        File puntos = new File("guacamoleSave");
+                        PrintWriter fileOut = new PrintWriter(puntos);
+                        fileOut.println("100,demo");
+                        fileOut.close();
+                        fileIn = new BufferedReader(new FileReader("guacamoleSave"));
+                }
+                String dato = fileIn.readLine();
+                      velocidadVertical = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      velocidadHorizontal = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      score = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      vidas = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      contador = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      bola.setPosX(Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      bola.setPosY(Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      canasta.setPosX(Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      state = (Integer.parseInt(dato));
+                      dato = fileIn.readLine();
+                      activo = Boolean.parseBoolean(dato);
+                fileIn.close();
+        }
+    
+    public void grabaArchivo() throws IOException {
+                PrintWriter fileOut = new PrintWriter(new FileWriter("guacamoleSave"));
+                fileOut.println(String.valueOf(velocidadVertical));
+                fileOut.println(String.valueOf(velocidadHorizontal));
+                fileOut.println(String.valueOf(score));
+                fileOut.println(String.valueOf(vidas));
+                fileOut.println(String.valueOf(contador));
+                fileOut.println(String.valueOf(bola.getPosX()));
+                fileOut.println(String.valueOf(bola.getPosY()));
+                fileOut.println(String.valueOf(canasta.getPosX()));
+                fileOut.println(String.valueOf(state));
+                fileOut.println(String.valueOf(activo));
+
+                
+                fileOut.close();
+        }
     
     void checaColision() {
         
@@ -212,6 +307,12 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             } else {
                 state = 2;
             }
+        }
+        if(e.getKeyCode() == KeyEvent.VK_G) {
+            guardar=true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_C) {
+            cargar=true;
         }
         
     }
