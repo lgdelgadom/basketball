@@ -8,7 +8,8 @@ package basketball;
 
 /**
  * v.0.0.1
- * @author Luis
+ * @author Luis y Ricardo
+ * A01191118 y A01191463
  */
 
 import javax.swing.JFrame;
@@ -23,11 +24,11 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedReader;
-import java.net.URL;
-import java.util.Iterator;
-import java.util.Random;
+//import java.net.URL;
+//import java.util.Iterator;
+//import java.util.Random;
 import java.io.File;
-import java.io.BufferedWriter;
+//import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -39,7 +40,7 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
 
     private Image dbImage;
     private Graphics dbg;
-    private final int gravedad;
+    private final int gravedad = 1;
     private int velocidadVertical;
     private int velocidadHorizontal;
     private Bola bola;
@@ -49,25 +50,31 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
     private boolean right;
     private int vidas;
     private int contador;
-    private boolean activo, guardar, cargar;
+    private boolean activo, guardar, cargar, silencio;
     private int state;
     
     private long tiempoActual;
     private long tiempoInicial;
     //Sonidos
-    private SoundClip bomb;
+    private SoundClip bomb, punch;
      //Animaciones
     private Animacion pelotaAnim, canastaAnim, netLeft, netRight;
     
-    public Basketball() {
+    public Basketball(){
+        init();
+        start();
+    }
+    
+    public void init() {
         
-        setSize(700, 700);
+        setSize(1000, 700);
         setBackground(Color.orange);
         addKeyListener(this);
         addMouseListener(this);
         
         //SoundClips
         bomb = new SoundClip("Explosion.wav");
+        punch = new SoundClip("punch.wav");
         //Animaciones
 	Image bola1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball1.png"));
 	Image bola2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("basketball2.png"));
@@ -101,24 +108,23 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         netRight.sumaCuadro(canastaR2, 100);
 
         
-        gravedad = 1;
 
         velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
-        velocidadHorizontal = (int)((Math.random() * 4) + 6);
+        velocidadHorizontal = (int)((Math.random() * 6) + 10);
 
         right = false;
         left = false;
         vidas = 5;
         contador = 3;
         activo = false;
-        guardar = cargar = false;
+        guardar = cargar = silencio = false;
         state = 0;
         
         bola = new Bola(100, 400, pelotaAnim);
         canasta = new Canasta(0, 0, canastaAnim);
         canasta.setPosX(getWidth()/2 - canasta.getAncho()/2);
         canasta.setPosY(getHeight() - canasta.getAlto() - 10);
-        start();
+        
         
     }
     
@@ -254,9 +260,10 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             bola.setPosX(100);
             bola.setPosY(400);
             velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
-            velocidadHorizontal = (int)((Math.random() * 4) + 6);
+            velocidadHorizontal = (int)((Math.random() * 6) + 10);
             activo = false;
-            bomb.play();
+            if(!silencio)
+                bomb.play();
             
             if(contador > 1) {
                 contador--;
@@ -278,9 +285,11 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             bola.setPosX(100);
             bola.setPosY(400);
             velocidadVertical = (int)(-1 * (Math.random() * 15 + 10));
-            velocidadHorizontal = (int)((Math.random() * 4) + 6);
+            velocidadHorizontal = (int)((Math.random() * 6) + 10);
             score +=2;
             activo = false;
+            if(!silencio)
+                punch.play();
             
         }
         
@@ -313,6 +322,12 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
         }
         if(e.getKeyCode() == KeyEvent.VK_C) {
             cargar=true;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_S) {
+            silencio=!silencio;
+        }
+        if(e.getKeyCode() == KeyEvent.VK_R) {            
+            init();
         }
         
     }
@@ -365,7 +380,13 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             g.setColor(Color.white);
             g.drawString("Score: " + score, 20, 60);
             g.drawString("Lives: " + vidas, 20, 80);
-            if(state == 1) {
+            if(vidas==0){
+                g.setColor(Color.red);
+                g.setFont(new Font("arial", Font.BOLD, 60));
+                g.drawString("PERDISTE", getWidth()/2 - 100, getHeight()/2);    
+                state = 1;
+            }
+            else if(state == 1) {
                 g.setFont(new Font("arial", Font.BOLD, 60));
                 g.drawString("PAUSA", getWidth()/2 - 100, getHeight()/2);
             }
@@ -375,6 +396,11 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
                 g.setColor(Color.white);
                 g.setFont(new Font("arial", Font.BOLD, 50));
                 g.drawString("INSTRUCCIONES", getWidth()/2 - 210, 200);
+            }
+            if(vidas==0){
+                g.setColor(Color.red);
+                g.setFont(new Font("arial", Font.BOLD, 60));
+                g.drawString("PERDISTE", getWidth()/2 - 100, getHeight()/2);    
             }
             
         } else {
