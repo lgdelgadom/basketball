@@ -393,9 +393,20 @@ public class Basketball extends JFrame implements Runnable, KeyListener, MouseLi
             if(state == 2) {
                 g.setColor(Color.green);
                 g.fillRect(100, 100, getWidth() - 200, getHeight() - 200);
-                g.setColor(Color.white);
+                g.setColor(Color.black);
                 g.setFont(new Font("arial", Font.BOLD, 50));
                 g.drawString("INSTRUCCIONES", getWidth()/2 - 210, 200);
+                g.setFont(new Font("arial", Font.BOLD, 20));
+                g.drawString("Objetivo: atrapar la pelota de basketball para hacer puntos.", getWidth()/2 - 300, 220);
+                g.drawString("Presionar flechas(izquierda y derecha) para moverse.", getWidth()/2 - 300, 240);
+                g.drawString("Presionar 'i' para instruciones.", getWidth()/2 - 300, 260);
+                g.drawString("Presionar 'p' para pausar.", getWidth()/2 - 300, 280);
+                g.drawString("Presionar 'g' para guardar el juego.", getWidth()/2 - 300, 300);
+                g.drawString("Presionar 'c' para cargar el juego", getWidth()/2 - 300, 320);
+                g.drawString("Presionar 's; para silenciar los sonidos.", getWidth()/2 - 300, 340);
+                g.drawString("Presionar 'r' para reinicar(experimental) el juego.", getWidth()/2 - 300, 360);
+                g.drawString("Tienes 5 vidas y perderas 1 vida cada tercera vez que", getWidth()/2 - 300, 390);
+                g.drawString("la pelota toque el piso. Suerte!", getWidth()/2 - 300, 410);
             }
             if(vidas==0){
                 g.setColor(Color.red);
